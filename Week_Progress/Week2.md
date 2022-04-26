@@ -36,3 +36,8 @@ Although our final goal is not to controll the motor manually but rather with no
 
 Going fowards our final goal we should define how to properlly control the voltage input without a (manual) potentiometer. (no ideal yet, should search for references...)
 
+## 3 - Joint Manufacture
+
+Sugestion (after we take the mesures I can design a final version o CAD):
+
+![Scketch Joint](Scketch_Joint.png)
