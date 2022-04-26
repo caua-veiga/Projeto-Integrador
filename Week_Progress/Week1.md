@@ -5,4 +5,5 @@ In the first week as a prepation we planned the main scope of our project. Durin
 
 ## 1. Identified Components
 1. 850Kv Brushless Motor - https://www.buildyourowndrone.co.uk/850kv-motor-ac2830-358
+
 2. jDrones 20 Amp ESC AC20-1.0 - https://www.buildyourowndrone.co.uk/arducopter-esc-20-amp
