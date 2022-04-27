@@ -48,8 +48,14 @@ Going fowards our final goal we should define how to properlly control the volta
 *Note* that gyroscope and accelerometer sensor data of MPU6050 module consists of 16-bit raw data in 2’s complement form. 
 The complete documentation, including the datasheet and register map can be seen at - https://www.electronicwings.com/sensors-modules/mpu6050-gyroscope-accelerometer-temperature-sensor-module
 
-### 2.1 - Read the values that the accelerometre gives
-''Copied from the source code http://electronoobs.com/eng_robotica_tut6_1_code1.php#google_vignette'' 
+### 2.1 - Read the data from the accelerometer
+'''
+
+Copied from the source code http://electronoobs.com/eng_robotica_tut6_1_code1.php#google_vignette
+
+This is the full PID Code used at https://www.youtube.com/watch?v=AN3yxIBAxTA&t=787s 
+
+''' 
 
 We know that the slave adress fro this IMU is 0x68 in hexadecimal. For that in the RequestFrom and the begin funcitons we gave to put this value.
 
@@ -77,6 +83,40 @@ Now we can apply the Euler formula. The atan will calculate the arctangent. The 
      /*---Y---*/
      Acceleration_angle[1] = atan(-1*(Acc_rawX/16384.0)/sqrt(pow((Acc_rawY/16384.0),2) + pow((Acc_rawZ/16384.0),2)))*rad_to_deg;
 
+
+### 2.2 - Read the data from the gyroscope
+
+Now we read the Gyro data in the same way as the Acc data. The adress for the gyro data starts at 0x43. We can see this adresses if we look at the register map of the MPU6050. In this case we request just 4 values. W don¡t want the gyro for  the Z axis (YAW).
+
+     Wire.beginTransmission(0x68);
+     Wire.write(0x43); //Gyro data first adress
+     Wire.endTransmission(false);
+     Wire.requestFrom(0x68,4,true); //Just 4 registers
+
+     Gyr_rawX=Wire.read()<<8|Wire.read(); //Once again we shif and sum
+     Gyr_rawY=Wire.read()<<8|Wire.read();
+
+Now in order to obtain the gyro data in degrees/seconds we have to divide first the raw value by 131 because that's the value that the datasheet gives us.
+
+     /*---X---*/
+     Gyro_angle[0] = Gyr_rawX/131.0; 
+     
+     /*---Y---*/
+     Gyro_angle[1] = Gyr_rawY/131.0;
+
+
+Then in order to obtain degrees we have to multiply the degree/seconds value by the elapsedTime. Finnaly we can apply the final filter where we add the acceleration part that afects the angles and ofcourse multiply by 0.98.
+
+     /*---X axis angle---*/
+     Total_angle[0] = 0.98 *(Total_angle[0] + Gyro_angle[0]*elapsedTime) + 0.02*Acceleration_angle[0];
+     
+     /*---Y axis angle---*/
+     Total_angle[1] = 0.98 *(Total_angle[1] + Gyro_angle[1]*elapsedTime) + 0.02*Acceleration_angle[1];
+   
+Now we have our angles in degree and values from -10º0 to 100º aprox
+
+     Serial.println(Total_angle[1]);
+    
 ## 3 - Joint Manufacture
 
 Sugestion (after we take the mesures I can design a final version o CAD):
