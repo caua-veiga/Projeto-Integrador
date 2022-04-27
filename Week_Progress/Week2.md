@@ -48,6 +48,35 @@ Going fowards our final goal we should define how to properlly control the volta
 *Note* that gyroscope and accelerometer sensor data of MPU6050 module consists of 16-bit raw data in 2’s complement form. 
 The complete documentation, including the datasheet and register map can be seen at - https://www.electronicwings.com/sensors-modules/mpu6050-gyroscope-accelerometer-temperature-sensor-module
 
+### 2.1 - Read the values that the accelerometre gives
+''Copied from the source code http://electronoobs.com/eng_robotica_tut6_1_code1.php#google_vignette'' 
+
+We know that the slave adress fro this IMU is 0x68 in hexadecimal. For that in the RequestFrom and the begin funcitons we gave to put this value.
+
+     Wire.beginTransmission(0x68);
+     Wire.write(0x3B); //Ask for the 0x3B register- correspond to AcX
+     Wire.endTransmission(false);
+     Wire.requestFrom(0x68,6,true);  
+
+We have asked for the 0x3B register. The IMU will send a brust of register. The amount of register to read is specify in the requestFrom functioon- In this case we resquest 6 registers. Each value of acceleration is made out of two 8-bits registers, low values and high values. For that we shift to the left the high values register (<<) and make and or (|) operation to add the low values.
+
+     Acc_rawX=Wire.read()<<8|Wire.read(); //each value needs two registres
+     Acc_rawY=Wire.read()<<8|Wire.read();
+     Acc_rawZ=Wire.read()<<8|Wire.read();
+
+This is the part where you need to calculate the angles using Euler equations
+    
+  Now, to obtain the values of acceleration in "g" units we first have to divide the raw  values that we have just read by 16384.0 because that is the value that the MPU6050 datasheet gives us. Next we have to calculate the radian to degree value by dividing 180º by the PI number which is 3.141592654 and store this value in the rad_to_deg variable. In order to not have to calculate this value in each loop we have done that just once before the setup void. 
+
+Now we can apply the Euler formula. The atan will calculate the arctangent. The pow(a,b) will elevate the a value to the b power. And finnaly sqrt function will calculate the rooth square.
+
+    /*---X---*/
+
+     Acceleration_angle[0] = atan((Acc_rawY/16384.0)/sqrt(pow((Acc_rawX/16384.0),2) + pow((Acc_rawZ/16384.0),2)))*rad_to_deg;
+
+     /*---Y---*/
+     Acceleration_angle[1] = atan(-1*(Acc_rawX/16384.0)/sqrt(pow((Acc_rawY/16384.0),2) + pow((Acc_rawZ/16384.0),2)))*rad_to_deg;
+
 ## 3 - Joint Manufacture
 
 Sugestion (after we take the mesures I can design a final version o CAD):
