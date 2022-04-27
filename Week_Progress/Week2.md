@@ -12,6 +12,8 @@
 
 2. Design the joint to be manufactured (if we can find the mesurements online, otherwise we have to mesure it and design during class)
 
+3. Install IDE and Python dependence 'firmata' - https://realpython.com/arduino-python/
+
 # Work During Class
 
 ## 1 - Control the motor with Arduino
