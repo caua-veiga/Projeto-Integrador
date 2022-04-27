@@ -24,6 +24,11 @@ A guide on how it works and how to control: https://www.youtube.com/watch?v=uOQk
 
 ![Arduino_ESC_Diagram](Arduino_ESC_Diagram.png)
 
+### 1.. - ESC Calibration
+Code to calibrate the ESC - 
+
+http://electronoobs.com/eng_robotica_tut5_1_code1.php
+
 ### 1.1 - Setup at fixed voltage
 
 In the referenced video it is used a potentiometer so that the voltage can be changed manually resulting in a manual controll of the output thrust of the motor. 
