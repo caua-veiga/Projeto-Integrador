@@ -38,6 +38,11 @@ Although our final goal is not to controll the motor manually but rather with no
 
 Going fowards our final goal we should define how to properlly control the voltage input without a (manual) potentiometer. (no ideal yet, should search for references...)
 
+## 2 - Test the MPU6050 IMU sensor and properly identify how it operates
+
+*Note* that gyroscope and accelerometer sensor data of MPU6050 module consists of 16-bit raw data in 2’s complement form. 
+The complete documentation, including the datasheet and register map can be seen at - https://www.electronicwings.com/sensors-modules/mpu6050-gyroscope-accelerometer-temperature-sensor-module
+
 ## 3 - Joint Manufacture
 
 Sugestion (after we take the mesures I can design a final version o CAD):
