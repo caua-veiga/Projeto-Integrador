@@ -14,6 +14,19 @@
 
 3. Install IDE and Python dependence 'firmata' - https://realpython.com/arduino-python/
 
+## Note
+
+There are two options for controlling the Arduino board with Python. 
+
+The pyfirmata package implements the Firmata protocol to communicate with the board through Python. However, it is compatible only with Python 2.7, 3.3 and 3.4 - https://pypi.org/project/pyFirmata/
+
+The other option is to use MicroPython through the OpenMV Editor (not sure if Mu Editor cuts it for Arduino). However, there are few boards supporting MicroPython and we must check if one is available to us - https://docs.arduino.cc/learn/programming/arduino-and-python#compatible-boards. Namely, the compatible boards are:
+
+- Nano 33 BLE
+- Nano 33 BLE Sense
+- Nano RP2040 Connect
+- Portenta H7
+
 # Work During Class
 
 ## 1 - Control the motor with Arduino
