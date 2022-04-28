@@ -10,3 +10,10 @@ Para além disso, o IMU MPU-6050: https://invensense.tdk.com/products/motion-tra
 é também fácilmente suportado pelo ESP32: https://randomnerdtutorials.com/esp32-mpu-6050-accelerometer-gyroscope-arduino/
 
 Exemplo de tensorflow lite no esp32: https://blog.tensorflow.org/2020/08/announcing-tensorflow-lite-micro-esp32.html
+
+
+
+### Deep Reinforcement Learning on ESP32
+https://www.hackster.io/aslamahrahiman/deep-reinforcement-learning-on-esp32-843928
+
+https://github.com/aslamahrahman/Policy-Gradient-Network-Arduino
