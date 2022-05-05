@@ -53,3 +53,6 @@ Thrust
 135W
 1095gr
 
+Table to get battery voltage
+https://blog.ampow.com/lipo-voltage-chart/
+
