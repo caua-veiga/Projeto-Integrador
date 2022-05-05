@@ -17,3 +17,8 @@ In addition to that we also controlled the motor speed using the arduino code in
 The professor did not yet have the MPU6050 IMU sensor but he said that he will buy it in the provided link: 
 https://www.ptrobotics.com/acelerometros/3639-triple-axis-accelerometer-gyro-mpu-6050.html
 
+# To-do
+
+We realized that the arduino microcontroller does'nt have support to the tensorflowLite module, so we will change to a esp32 Pico board.
+
+1. Write the ESC callibration code in micropython
