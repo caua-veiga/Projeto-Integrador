@@ -21,4 +21,6 @@ https://www.ptrobotics.com/acelerometros/3639-triple-axis-accelerometer-gyro-mpu
 
 We realized that the arduino microcontroller does'nt have support to the tensorflowLite module, so we will change to a esp32 Pico board.
 
-1. Write the ESC callibration code in micropython
+1. Write the ESC callibration code in micropython:
+https://docs.micropython.org/en/latest/library/pyb.html
+
