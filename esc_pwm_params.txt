@@ -1,0 +1,5 @@
+Freq = 50Hz
+Period = 20ms
+Lowest Negative Duty = 5%
+Greatest Negative Duty = 10%
+Pico-Pico = 4.8V
