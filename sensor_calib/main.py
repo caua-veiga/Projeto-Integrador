@@ -2,6 +2,7 @@ from machine import Pin, I2C, sleep
 import math
 import mpu6050
 from time import ticks_ms
+import json
 
 i2c = I2C(scl=Pin(22), sda=Pin(21))     #initializing the I2C method for ESP32
 #i2c = I2C(scl=Pin(5), sda=Pin(4))       #initializing the I2C method for
@@ -16,8 +17,15 @@ def unpack(values):
     gyro_y = values["GyY"]
     return accel_x, accel_y, accel_z, gyro_x, gyro_y
 
+accel_angles = []
+gyro_angles = []
+filter_angles = []
+
 gyro_angle = 0
-while True:
+count = 0
+total = 100
+while count < total:
+    count += 1
     start = ticks_ms()
     values = mpu.get_values()
     now = ticks_ms()
@@ -35,5 +43,16 @@ while True:
     # complimentary filter
     angle = 0.98*gyro_angle + 0.02*accel_angle
 
+    accel_angles.append(accel_angle)
+    gyro_angles.append(gyro_angle)
+    filter_angles.append(angle)
+
+
     print(angle * 180 / math.pi)
-    sleep(10)
+    sleep(20)
+
+data = {'gyro':gyro_angles, 'accel':accel_angles, 'filter':filter_angles}
+
+jsn = json.dumps(data)
+with open("./testeSensor.json", "w") as f:
+    json.dump(jsn, f)
