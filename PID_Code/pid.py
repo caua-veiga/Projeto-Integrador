@@ -32,6 +32,9 @@ class PID():
         self.umax = 1. # actuator range is [0., 1.0]
         self.umin = -1.
 
+    def __str__(self):
+        return f'P: {self.P}\nD: {self.D}\nI: {self.I}\nOutput: {self.u}'
+
     def write(self, data, dt):
         self.P = self.Kp * (self.b * self.uc - self.y)
 
@@ -51,20 +54,4 @@ class PID():
             output = self.umin
         self.u = output
         return self.u
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
