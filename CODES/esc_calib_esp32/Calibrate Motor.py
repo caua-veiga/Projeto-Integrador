@@ -3,7 +3,7 @@ from machine import Pin, PWM
 import uasyncio
 
 
-class Calibrate(PIN):
+class Calibrate():
 
     def __init__(self,PIN):
         self.pwm = PWM(Pin(PIN)) # Defining the GPIO Pin that will output our PWM signal
