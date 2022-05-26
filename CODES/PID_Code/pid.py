@@ -11,10 +11,10 @@ class PID():
     This case must be corrected externally.
     """
 
-    def __init__(self, uc=0.):
-        self.Kp = 0. # proportional gain
-        self.Td = 0. # derivative time
-        self.Ti = 0. # integration time
+    def __init__(self, Kp=0., Td=0., Ti=0.1, uc=0.):
+        self.Kp = Kp # proportional gain
+        self.Td = Td # derivative time
+        self.Ti = Ti # integration time
         self.N = 3. # derivative action limitter
         self.b = 0.8 # setpoint limitter for proportional action
 
@@ -28,14 +28,16 @@ class PID():
         self.I = 0. # integral action
 
         self.Imax = 100. # integral action limitter to prevent windup
+        self.Imin = -100.
 
         self.umax = 1. # actuator range is [0., 1.0]
         self.umin = -1.
 
     def __str__(self):
-        return f'P: {self.P}\nD: {self.D}\nI: {self.I}\nOutput: {self.u}'
+        return f'P: {self.P}\nD: {self.D}\nI: {self.I}\nOutput: {self.u}\n'
 
     def write(self, data, dt):
+        self.y = data
         self.P = self.Kp * (self.b * self.uc - self.y)
 
         self.D *= self.Td/(self.Td + self.N*dt)
@@ -43,11 +45,12 @@ class PID():
         self.D -= temp * (self.y - self.yold)
 
         self.I += self.Kp * dt * (self.uc - self.y) / self.Ti
-        if self.I > self.Imax: # prevent windup
-            self.I = self.Imax
+
+        self.I = self.Imax if self.I > self.Imax else self.I
+        self.I = self.Imin if self.I < self.Imin else self.I
 
     def read(self):
-        output = self.P + sel;f.D + self.I
+        output = self.P + self.D + self.I
         if output > self.umax:
             output = self.umax
         if output < self.umin:

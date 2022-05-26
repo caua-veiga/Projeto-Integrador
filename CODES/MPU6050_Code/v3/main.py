@@ -4,29 +4,6 @@ import mpu6050
 from time import ticks_ms
 import json
 from pid import PID
-import socket
-
-def do_connect():
-    '''
-    Input must be a tuple: (essid, password)
-    '''
-    import network
-
-    essid =  'iPhone Caua' #'UPTEC' #'Galaxy A32 5G1A70'
-    password =  'caualex12' #'UPTECNET'  #'yfee4537'
-
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    print(wlan.scan())
-    if not wlan.isconnected():
-        print('connecting to network...')
-        wlan.connect(essid, password)
-        while not wlan.isconnected():
-            pass
-    print('network config:', wlan.ifconfig())
-
-do_connect()
-
 
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))     #initializing the I2C method for ESP32
 
@@ -89,15 +66,6 @@ sampling_interval = 10 # ms
 controller = PID(Kp=0.05, Td=0.5, Ti=10.)
 
 
-
-# operating on IPv4 addressing scheme
-
-serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-# Bind and listen
-serverSocket.bind(("172.20.10.5",80))
-serverSocket.listen()
-
 while True:
 
     currentTime = ticks_ms()
@@ -124,7 +92,7 @@ while True:
         controller.write(roll, dt)
         controller.read()
 
-        #print(controller)
+        print(controller)
 
         # accel_angle = wrap(accel_angle, limit=180)
         # gyro_angle = wrap(gyro_angle, limit=180)
@@ -133,23 +101,6 @@ while True:
         # toPrint += str(gyro_angle)  + "/"
         #toPrint += str(roll)
         #print(toPrint)
-
-        # Accept connections
-        (clientConnected, clientAddress) = serverSocket.accept()
-        print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
-
-
-
-        dataFromClient = clientConnected.recv(1024)
-
-        print(dataFromClient.decode())
-
-
-
-        # Send some data back to the client
-        data = json.dumps({'Angle': roll})
-
-        clientConnected.send(data.encode("utf-8"))
 
 
 
