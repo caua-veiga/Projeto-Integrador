@@ -5,6 +5,7 @@ from time import ticks_ms
 import json
 from pid import PID
 import socket
+from Calibrate_Motor import Motor
 
 def do_connect():
     '''
@@ -88,7 +89,13 @@ sampling_interval = 10 # ms
 
 controller = PID(Kp=0.05, Td=0.5, Ti=10.)
 
-
+motorLeft = Motor(13)
+motorRight = Motor(25)
+print("Calibrating left motor...")
+motorLeft.calibrateESC()
+print("Calibrating right motor...")
+motorRight.calibrateESC()
+print("Finished calibrating motors...")
 
 # operating on IPv4 addressing scheme
 
@@ -132,23 +139,15 @@ while True:
 
         #print(f'Angle: {roll}')
         controller.write(roll, dt)
-        controller.read()
+        controller_output = controller.read()
+        print(f"P={controller.P:.3f}", f"{controller.D:.3f}", f"{controller.I:.3f}", f"{controller_output}:.3f")
 
-        #print(controller)
-
-        # accel_angle = wrap(accel_angle, limit=180)
-        # gyro_angle = wrap(gyro_angle, limit=180)
-
-        #toPrint = str(accel_angle*rad2deg) + "/"
-        # toPrint += str(gyro_angle)  + "/"
-        #toPrint += str(roll)
-        #print(toPrint)
+        # Write controller output to motors
+        motorLeft.writePWM(0.5*controller_output)
+        motorRight.writePWM(-0.5*controller_output)
 
         dataFromClient = clientConnected.recv(1024)
-
         #print(dataFromClient.decode())
-
-
 
         # Send some data back to the client
         data = {'Angle': roll, 'Time': dt}

@@ -15,10 +15,10 @@ clientSocket.connect(("172.20.10.5",80))
 timestamp = [0.]
 angles = [0.]
 
-fig, ax = plt.figure()
-ax.add_subplot()
-line, = ax.plot(timestamp, angles)
-fig.show()
+# fig = plt.figure()
+# ax = fig.add_subplot()
+# line, = ax.plot(timestamp, angles)
+# fig.show()
 
 while True:
     # Send data to server
@@ -36,10 +36,13 @@ while True:
 
     # print(dataFromServer.decode("utf-8"))
     data = dataFromServer.decode("utf-8")
-    timestamp.append(timestamp[-1] + data["Time"])
-    angles.append(data["Angle"])
-    line.set_data(timestamp, angles)
-    ax.draw()
+    print(data)
+    # timestamp.append(timestamp[-1] + data["Time"])
+    # angles.append(data["Angle"])
+    # print(timestamp)
+    # print(angles)
+#    line.set_data(timestamp, angles)
+ #   ax.draw()
 
     #clientSocket.detach()
-    time.sleep(0.5)
+    time.sleep(1)
