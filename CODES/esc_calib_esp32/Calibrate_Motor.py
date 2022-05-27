@@ -13,8 +13,12 @@ class Motor():
     def writePWM(self, dut):
         new_dut = self.pwm.duty() + dut
         new_dut = 0 if new_dut < 0 else new_dut
-        new_dut = 1. if new_dut > 1 else new_dut
-        self.pwm.duty(new_dut)
+        #new_dut = 1. if new_dut > 1 else new_dut
+        new_dut = 0.15 if new_dut > 0.15 else new_dut
+        x = (new_dut+1)/20
+        duty = int(x*1023)
+        
+        self.pwm.duty(duty)
 
 
     def calibrateESC(self):
