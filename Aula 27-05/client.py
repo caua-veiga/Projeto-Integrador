@@ -45,4 +45,4 @@ while True:
  #   ax.draw()
 
     #clientSocket.detach()
-    time.sleep(1)
+    time.sleep(0.1)
