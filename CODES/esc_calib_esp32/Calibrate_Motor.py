@@ -31,3 +31,6 @@ class Motor():
         print('Esc is Calibrated!\nNow you can enter any value between 0 and 1')
         time.sleep_ms(350)
         self.writePWM(int(1/20 * 1023))
+
+    def deinit(self):
+        self.pwm.deinit()
