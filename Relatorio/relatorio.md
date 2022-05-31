@@ -16,15 +16,63 @@ Nota-se ainda que a escolha da placa favoreceu a programação na linguagem *Mic
 
 <span style="color:red">Adicionar explicação sobre funcionamento dos brushless motors e vantagens para seu uso em drones</span>
 
-Os motores sem escovas têm um princípio de funcionamento relativamente complexo, sendo operados por um sinal *AC* trifásico criado pelas unidades *ESC* a partir de um sinal *PWM* (*Pulse Width Modulation*). Sendo assim, o esquema de controlo é efetivamente análogo ao de um servomotor, bastando fornecer à *ESC* um sinal *PWM* com frequência de $50 \, Hz$, amplitude de $5 \, V$ e *duty-cycle* entre $[10,\, 15]\,\%$. Assim, a potência dos motores é controlada diretamente fazendo variar o *duty-cycle* do sinal *PWM*.
+Os motores sem escovas têm um princípio de funcionamento relativamente complexo, sendo operados por um sinal *AC* trifásico criado pelas unidades *ESC* a partir de um sinal *PWM* (*Pulse Width Modulation*).
+
+Sendo assim, o esquema de controlo é efetivamente análogo ao de um servomotor, bastando fornecer à *ESC* um sinal *PWM* com frequência de $50 \, Hz$, amplitude de $5 \, V$ e *duty-cycle* entre $[10,\, 15]\,\%$. Assim, a potência dos motores é controlada diretamente fazendo variar o *duty-cycle* do sinal *PWM*.
 
 <span style="color:red">Adicionar representação do sinal PWM e do sinal 'pós-ESC'</span>
 
+As unidades *ESC* utilizadas contém ainda um *Battery Eliminator Circuit* (*BEC*), pelo que o sistema necessitaria de apenas uma bateria para alimentar tanto a *ESC* ($5\,V$) e o motor ($8-12\,V$). Contudo, como a estrutura tem apenas 1 grau de liberdade, optamos por alimentar o motor com uma fonte externa, evitando recorrer ao uso de baterias.
+
 <span style="color:red">Adicionar esquema da ligação da ESC no circuito</span>
+
+Considerando que a placa *ESP32* funciona em lógica de $3.3 ~V$, para alimentar a *ESC* e gerar o sinal *PWM* adequado, é necessário ainda subir a sua tensão para *5 ~ V*.
+
+Numa primeira montagem, isto foi feito recorrendo a dois amplificadores operacionais *TL081* em configuração não-inversora (um para cada sinal *PWM*). Escolhendo para as resistências $R_1$, $R_2$ valores satisfazendo $R_2 \approx 0.51 R_1$, obtém-se o ganho necessário.
+
+Entretanto, esta montagem não é eficiente em termos de custo e de espaço. Com isto em mente, simplificamos o circuito introduzindo para tal um *Bi-directional Logic Level Converter* (*LLC*) (*SparkFun*).
+
+Como este integrado contém 4 canais para conversão, consegue-se realizar todas as conversões necessárias recorrendo-se a apenas uma unidade.
+
+<span style="color:red">Adicionar esquema dos Opamps</span>
+
+
+<span style="color:red">Adicionar esquema do LLC</span>
 
 # Sensor
 
-<span style="color:red">To do...</span>
+O sensor *MPU6050* escolhido contém um acelerómetro de 3 eixos e um giroscópio.
+
+O protocolo de comunicação em série adotado pelo dispositivo é o *I2C*. Tratando-se de um protocolo síncrono, a comunicação é estabelecida por 2 fios (*SDA* - *Serial Data*, *SCL* - *Serial Clock*).
+
+<span style="color:red">To do: adicionar esquema de ligação do sensor na ESP <span>
+
+A linguagem *MicroPython* contém as funções básicas para estabelecer este tipo de comunicação, sendo o sinal do relógio e a emissão dos *bits* feita automaticamente. Sendo assim, recorrendo à *datasheet* do sensor, basta ler os endereços corretos para aceder aos dados desejados.
+
+<span style="color:red">To do: inserir print da datasheet onde estão os endereços do acelerometro e girscópio <span>
+
+É importante notar que cada medição é representada 16 *bits*, em complemento para 2, mas estão armazenadas em dois registros de 8 *bits* cada. Sendo assim, é necessário agregar a informação dos dois registros num único valor para obter o resultado da medição. O método mais eficiente encontrado, em termos de código, recorre a operações binárias. O algoritmo é descrito a seguir:
+
+- Ler os 8 *bits* mais significativos e armazenar na variável $n_1$; 
+- Realizar um *bitshift* de 8 dígitos para esquerda (i.e dividir por $2^8$);
+- Ler os 8 *bits* menos significativos e armazenar na variável $n_2$; 
+- Aplicar operador lógico *or* entre os *bits* em $n_1, \, n_2$
+
+<span style="color:red">To do: adicionar ilustração (exemplo) deste algoritmo <span>
+
+Assim, com duas operações conseguimos reconsturir o número de 16 *bits*, restando agora sua conversão entre complemento para 2 e decimal:
+
+- Inverter valor lógico dos *bits*
+- Adicionar $1$
+
+Reliazar estas operações de modo eficiente é importante para que a latência vinda da execução do código não prejudique a taxa de amostragem. 
+
+Outro aspecto importante é notar que os valores obitdos pela conversão acima não correspondem às unidades esperadas (e.g $\deg / s$ para leitura do giroscópio). Os valores de conversão são também encontrados na *datasheet* e dependem dos valores fim-de-escala escolhidos para cada componente do sensor. 
+
+- Giroscópio:  $131.0 \textrm{LSB}/\deg/s$
+- Acelerómetro: $16384 \textrm{LSB}/g$
+
+Estes valores correspondem a escalas de $\pm 250 \deg/s$ para a leitura do giroscópio e $\pm 2g$ para leitura do acelerómetro. Estas configurações, dentre as disponíveis, foram as escolhidas a gama de medição esperada as preenche bem (o que implica numa maior resolução).
 
 # Algoritmo PID
 
