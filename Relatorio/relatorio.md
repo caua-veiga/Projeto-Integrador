@@ -69,14 +69,27 @@ Reliazar estas operações de modo eficiente é importante para que a latência 
 
 Outro aspecto importante é notar que os valores obitdos pela conversão acima não correspondem às unidades esperadas (e.g $\deg / s$ para leitura do giroscópio). Os valores de conversão são também encontrados na *datasheet* e dependem dos valores fim-de-escala escolhidos para cada componente do sensor. 
 
-- Giroscópio:  $131.0 \textrm{LSB}/\deg/s$
-- Acelerómetro: $16384 \textrm{LSB}/g$
+- Giroscópio:  $131.0 \,\, \textrm{LSB}/\deg/s$
+- Acelerómetro: $16384 \,\, \textrm{LSB}/g$
 
 Estes valores correspondem a escalas de $\pm 250 \deg/s$ para a leitura do giroscópio e $\pm 2g$ para leitura do acelerómetro. Estas configurações, dentre as disponíveis, foram as escolhidas a gama de medição esperada as preenche bem (o que implica numa maior resolução).
 
 # Algoritmo PID
 
-<span style="color:red">To do...</span>
+Para realizar o controlo dos motores, utilizou-se um algoritmo *PID* (*Proportional, Integral, Differential*).
+
+O algoritmo baseia-se em calcular o ajuste necessário à potência dos motores, de modo a manter o valor de $\theta$ medido pelo sensor próximo a um valor fixado (*setpoint*) $\theta_{sp} = 0^{\small{\circ}}$. A resposta $u$ é então calculada a partir do erro $e = \theta - \theta_{sp}$ como:
+
+$$
+u = K_p e + \frac{1}{T_d}\frac{de}{dt} + \frac{1}{T_i}\int e\,\,dt \equiv P + D + I
+$$
+
+As constantes $K_p$, $T_i$ (tempo de integração) e $T_d$ são determinadas empiricamente por um processo de calibração.
+
+O termo *P* é a contribuição mais fundamental para o controlador, que faz com que a resposta do sistema seja tão maior quanto o erro. Contudo, esta contribuição se utilizada sozinha levaria a transientes longos e o ponto de operação do sistema teria $u \ne 0$. A inclusão do termo $D$ ajuda a diminuir a duração do transiente, pois ajusta a resposta no tempo presente baseando-se numa estimativa do erro no instante seguinte. Por outro lado, o sistema ainda poderia estabilizar em torno de um ponto de equilíbrio diferente de $\theta_{sp}$, pelo que o termo $I$ garante que nesta situação, o erro seja eventualmente compensado uma vez que é acumulado ao longo do tempo (sendo $u$ atualizado de modo correspondente).
+
+Para implementar este algoritmo com o microcontrolador, seguiu-se as indicações encontradas no livro 
+<span style="color:red">Incluir referencia do livro do Astrom</span>
 
 # Comunicação Wi-Fi
 
