@@ -14,8 +14,8 @@ def do_connect():
     '''
     import network
 
-    essid =  'Galaxy A32 5G1A70' #'iPhone Caua' #'UPTEC' #'Galaxy A32 5G1A70'
-    password = 'yfee4537' #'caualex12' #'UPTECNET'  #'yfee4537'
+    essid =  'iPhone Caua' #'iPhone Caua' #'UPTEC' #'Galaxy A32 5G1A70'
+    password = 'caualex12' #'caualex12' #'UPTECNET'  #'yfee4537'
 
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
@@ -96,7 +96,7 @@ print("Done calibrating motors")
 # Operating on IPv4 addressing scheme
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # Bind and listen
-serverSocket.bind(("192.168.203.53",80)) #192.168.203.53 #172.20.10.5
+serverSocket.bind(("172.20.10.5",80)) #192.168.203.53 #172.20.10.5
 serverSocket.listen()
 # Wait for client connection
 connected = False

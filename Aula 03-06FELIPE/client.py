@@ -3,14 +3,13 @@
 
 import socket
 import time
-import matplotlib.pyplot as plt
 
 # Create a client socket
 
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect to the server
-clientSocket.connect(("192.168.203.53",80))
+clientSocket.connect(("172.20.10.5",80))
 
 timestamp = [0.]
 angles = [0.]
