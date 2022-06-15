@@ -6,8 +6,10 @@ import uasyncio
 class Motor():
 
     def __init__(self,PIN):
+        self.pin = PIN
         self.pwm = PWM(Pin(PIN)) # Defining the GPIO Pin that will output our PWM signal
         self.pwm.freq(50) # The frequency of our PWM will always be 50Hz
+        self.pwm.duty(int(1/20*1023))
 
 
     def writePWM(self, inc):
@@ -21,13 +23,17 @@ class Motor():
         x = (new_duty + 1)/20
         self.pwm.duty(int(x*1023))
 
-    def setPWM(self, duty):
+    def setPWM(self, new_duty):
         # Use with calibration
         # This is meant to set a new absolute duty value
-        if duty > 1:
-            duty = 1
-        x = (duty + 1)/20
+        if new_duty > 1:
+            new_duty = 1
+        if new_duty < 0:
+            new_duty = 0
+        
+        x = (new_duty + 1)/20
         self.pwm.duty(int(x*1023))
+        print(f'Calib. Motor {self.pin}:  {int(x*1023)}',end='\n')
 
     def deinit(self):
         self.pwm.deinit()

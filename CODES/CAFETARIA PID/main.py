@@ -25,7 +25,7 @@ def do_connect():
             pass
     print('network config:', wlan.ifconfig())
 
-do_connect()
+# do_connect()
 
 
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21))     #initializing the I2C method for ESP32
@@ -92,11 +92,11 @@ controller = PID(Kp=0.05, Td=0.5, Ti=10.)
 
 # operating on IPv4 addressing scheme
 
-serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Bind and listen
-serverSocket.bind(("172.20.10.5",80))
-serverSocket.listen()
+# serverSocket.bind(("172.20.10.5",80))
+# serverSocket.listen()
 
 while True:
 
@@ -135,21 +135,18 @@ while True:
         #print(toPrint)
 
         # Accept connections
-        (clientConnected, clientAddress) = serverSocket.accept()
-        print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
+#         (clientConnected, clientAddress) = serverSocket.accept()
+#         print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
 
 
 
-        dataFromClient = clientConnected.recv(1024)
+#         dataFromClient = clientConnected.recv(1024)
 
-        print(dataFromClient.decode())
+#         print(dataFromClient.decode())
 
 
 
         # Send some data back to the client
-        data = json.dumps({'Angle': roll})
-
-        clientConnected.send(data.encode("utf-8"))
 
 
 
