@@ -33,19 +33,6 @@ i2c = SoftI2C(scl=Pin(22), sda=Pin(21)) # Initializing the I2C method for ESP32
 
 mpu= mpu6050.accel(i2c)
 
-def calibrate_sensor():
-    offsets = [0, 0, 0, 0, 0] # ax, ay, az, gx, gy
-    count = 0
-    total = 1000
-    # Calculate average offset value
-    while count < total:
-        count += 1
-        raw_measurements = mpu.get_values()
-        measurements = list(unpack(raw_measurements))
-        for i, offset in enumerate(offsets):
-            offsets[i] = offsets[i] + (measurements[i] - offsets[i])/count
-    offsets[2] = offsets[2] - 1.0 #
-    return offsets
 
 def unpack(values, offsets=None):
     """
@@ -67,10 +54,7 @@ def unpack(values, offsets=None):
 
 # Calibrate before using to determine sensor offset values
 # Must position sensor on flat surface
-print("Calibrating sensor... ",end='\n')
-offsets = calibrate_sensor()
-with open('calibration_offsets.json', 'w') as file:
-    json.dump(offsets, file) # Store calibration results (radians)
+offsets = [0.01475194, -0.02073169, -0.1112247, 9.591637, 1.257359]
 print("Done calibrating sensor",end='\n')
 
 def calibrate_ESC(motor1, motor2):
@@ -120,7 +104,7 @@ def main_loop():
     previousTime = ticks_ms()
     sampling_interval = 10 # ms
     # Intialize controller
-    controller = PID(Kp=0.05, Td=0.5, Ti=10.)
+    controller = PID(Kp=0.05, Kd=0., Ki=0.)
 
     while True:
         currentTime = ticks_ms()

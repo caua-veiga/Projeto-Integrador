@@ -13,11 +13,14 @@ class Motor():
 
 
     def writePWM(self, inc):
+        # print("attempting write" + "  " + str(inc), end="\n")
         # Use only with the PID
         # This is meant to update the current duty value with an increment
         min_duty_allowed = 0.
-        max_duty_allowed = 0.1
-        new_duty = self.pwm.duty() + inc
+        max_duty_allowed = 0.7
+        curr_duty = 20*self.pwm.duty()/1023 - 1
+        new_duty = curr_duty + inc
+        # print("increment" + "  " + str(new_duty), end="\n")
         new_duty = 0 if new_duty < min_duty_allowed else new_duty
         new_duty = max_duty_allowed if new_duty > max_duty_allowed else new_duty
         x = (new_duty + 1)/20
