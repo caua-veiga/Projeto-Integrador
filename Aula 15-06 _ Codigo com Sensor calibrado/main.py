@@ -121,7 +121,7 @@ def main_loop():
     sampling_interval = 10 # ms
     # Intialize controller
     controller = PID(Kp=0.05, Td=0.5, Ti=10.)
-    
+
     while True:
         currentTime = ticks_ms()
         elapsedTime = currentTime - previousTime
