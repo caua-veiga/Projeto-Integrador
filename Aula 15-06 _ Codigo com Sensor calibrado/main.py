@@ -104,7 +104,9 @@ def main_loop():
     previousTime = ticks_ms()
     sampling_interval = 10 # ms
     # Intialize controller
-    controller = PID(Kp=0.05, Kd=0., Ki=0.)
+    controller = PID(Kp=0.15, Kd=0.1, Ki=0.01)
+    # Choose setpoint
+    controller.uc = 25
 
     while True:
         currentTime = ticks_ms()

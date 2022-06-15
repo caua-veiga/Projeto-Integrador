@@ -47,6 +47,8 @@ class PID():
 
         if abs(self.error) < 3: # only integrate if the error is small
             self.I += self.Ki * self.error
+        else:
+            self.I = 0
 
         self.I = self.Imax if self.I > self.Imax else self.I
         self.I = self.Imin if self.I < self.Imin else self.I
