@@ -8,26 +8,7 @@ from pid import PID
 import socket
 from motor import Motor
 
-def do_connect():
-    '''
-    Input must be a tuple: (essid, password)
-    '''
-    import network
 
-    essid =  'iPhone Caua' #'iPhone Caua' #'UPTEC' #'Galaxy A32 5G1A70'
-    password = 'caualex12' #'caualex12' #'UPTECNET'  #'yfee4537'
-
-    wlan = network.WLAN(network.STA_IF)
-    wlan.active(True)
-    #print(wlan.scan())
-    if not wlan.isconnected():
-        print('connecting to network...',end='\n')
-        wlan.connect(essid, password)
-        while not wlan.isconnected():
-            pass
-    #print('network config:', wlan.ifconfig())
-
-#do_connect()
 
 i2c = SoftI2C(scl=Pin(22), sda=Pin(21)) # Initializing the I2C method for ESP32
 
@@ -106,7 +87,7 @@ def main_loop():
     # Intialize controller
     controller = PID(Kp=0.15, Kd=0.1, Ki=0.01)
     # Choose setpoint
-    controller.uc = 25
+    controller.uc = 0
 
     while True:
         currentTime = ticks_ms()
