@@ -4,9 +4,9 @@
 
 # Introdução
 
-O projeto desenvolvido consiste num controlador para equilíbrio em 1 dimensão de um protótipo de *drone*. Consiste na implementação de um algoritmo PID num microcontrolador *ESP32-PICO-KIT*, de modo a estabilizar o eixo longitudinal de uma haste com motores ligados a hélices nas extremidades e um eixo de rotação no seu centro geométrico.
+O projeto desenvolvido consiste num controlador para equilíbrio em 1 dimensão de um protótipo de *drone* através implementação de um algoritmo PID num microcontrolador *ESP32-PICO-KIT*, de modo a estabilizar o eixo longitudinal de uma haste com motores ligados a hélices nas extremidades e um eixo de rotação no seu centro geométrico.
 
-Para isso, foram utilizados motores sem escovas obtidos a partir de um *drone* inativo que foi cedido para efeito deste trabalho. Estes motores foram por sua vez controlados pela *ESP32*, através de unidades ESC (*Electronic Speed Control*), também retiradas do *drone*. Ainda, utilizou-se um sensor *MPU6050*, que integra um acelerómetro de 3 eixos e um giroscópio. 
+Para isso, foram utilizados motores sem escovas obtidos a partir de um *drone* inativo que foi cedido para efeito deste trabalho. Estes motores foram por sua vez controlados pela *ESP32*, através de unidades ESC (*Electronic Speed Control*), também retiradas do *drone*. Ainda, utilizou-se um sensor *MPU-6050*, que integra um acelerómetro de 3 eixos e um giroscópio. 
 
 Finalmente, de modo a obter informação quantitativa sobre a estabilização, se aproveitou das funcionalidades *Wi-Fi* da placa para, a partir de um servidor hospedado nela, acessar aos dados em tempo real por computadores conectados à mesma rede.
 
@@ -38,6 +38,8 @@ Como este integrado contém 4 canais para conversão, consegue-se realizar todas
 
 
 <span style="color:red">Adicionar esquema do LLC</span>
+
+<span style="color:red">Não necessáriamente aqui, mas lembrar de falar sobre o problema das fontes devido ao motor puxar demasiada corrente, e então trocamos para duas fontes separadas.</span>
 
 # Sensor
 
@@ -93,7 +95,14 @@ Para implementar este algoritmo com o microcontrolador, seguiu-se as indicaçõe
 
 # Comunicação Wi-Fi
 
-<span style="color:red">To do...</span>
+<span style="color:red">To do:
+    - Falar sobre conectar os server e o client na mesma rede
+    - Falar sobre a frequência de 'aquisição'/Log
+    - Falar sobre quais são os dados que são passados
+</span>
+
+A comunicação Wi-Fi foi utilizada com o objetivo de realizarmos o log dos dados adquiridos em cada realização experimental. Para isso recorremos ao método de comunição *TCP socket*, onde utilizando a biblioteca python *socket* definimos a esp32 para agir como um servidor através do método *bind()* e *listen()*. Uma vez a escutar, com um segundo script a correr localmente em uma máquina pessoal (a agir como *client*) conectamos ao mesmo IP e nos comunicamos com o servidor (esp32) de modo a receber os dados.
+
 
 # Resultados
 
